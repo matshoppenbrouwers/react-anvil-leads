@@ -1,80 +1,90 @@
-// src/ProjectBlock.js
-import React from 'react';
+import React, { useEffect } from 'react';
+
+// Updated ProgressBar component
+const ProgressBar = ({ usedDays, budgetedDays }) => {
+  const isOverBudget = usedDays > budgetedDays;
+  const progressPercentage = isOverBudget ? 100 : (usedDays / budgetedDays) * 100;
+  const overBudgetPercentage = isOverBudget ? ((usedDays - budgetedDays) / budgetedDays) * 100 : 0;
+
+  const barStyle = {
+    backgroundColor: '#e0e0e0',
+    width: '100%',
+    height: '10px', // Thinner bar
+    borderRadius: '5px',
+    position: 'relative',
+    overflow: 'hidden',
+  };
+
+  const progressStyle = {
+    width: `${progressPercentage}%`,
+    backgroundColor: '#333', // Dark grey
+    height: '100%',
+    position: 'absolute',
+    top: '0',
+    left: '0',
+  };
+
+  const overBudgetStyle = {
+    width: `${overBudgetPercentage}%`,
+    backgroundColor: '#b22222', // Dark red for over-budget
+    height: '100%',
+    position: 'absolute',
+    top: '0',
+    right: '0',
+  };
+
+  return (
+    <div style={barStyle}>
+      <div style={progressStyle}></div>
+      {isOverBudget && <div style={overBudgetStyle}></div>}
+    </div>
+  );
+};
 
 function ProjectBlock({ project }) {
+  const team = project.team || [];
+
+  useEffect(() => {
+    console.log('Project Data:', project);
+  }, [project]);
+
   return (
-    <div className="project-block">
-      <h2>{project.ProjectName}</h2>
+    <div className="project-block" style={{ border: '1px solid #ddd', padding: '20px', marginBottom: '20px' }}>
+      {/* Display projectID in Project Overview */}
+      <h2>{`Project Overview: ${project.projectID}`}</h2>
 
       {/* Project Overview */}
       <div className="project-overview">
-        <p><strong>Project Overview</strong></p>
-        <p>Days: {project.DaysUsedTotal} / {project.DaysBudgetedTotal}</p>
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${(project.DaysUsedTotal / project.DaysBudgetedTotal) * 100}%` }}
-          />
-        </div>
+        <p>Days: {project.daysUsedTotal} / {project.daysBudgetedTotal}</p>
+        <ProgressBar usedDays={project.daysUsedTotal} budgetedDays={project.daysBudgetedTotal} />
       </div>
 
       {/* Team Resourcing */}
       <div className="team-resourcing">
         <p><strong>Team Resourcing</strong></p>
-        <table>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               <th>Name</th>
-              <th>Allocated Days</th>
+              <th>Budgeted Days</th>
               <th>Used Days</th>
               <th>Progress</th>
             </tr>
           </thead>
           <tbody>
-            {project.team.map((member, index) => (
+            {team.map((member, index) => (
               <tr key={index}>
                 <td>{member.name}</td>
                 <td>{member.budgetedDays}</td>
                 <td>{member.usedDays}</td>
-                <td className="progress-cell">
-                  <div className="small-progress-bar">
-                    <div
-                      className="small-progress-fill"
-                      style={{ width: `${(member.usedDays / member.budgetedDays) * 100}%` }}
-                    />
-                  </div>
+                <td>
+                  <ProgressBar usedDays={member.usedDays} budgetedDays={member.budgetedDays} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {/* Invoices */}
-      {project.invoices && project.invoices.length > 0 && (
-        <div className="invoices">
-          <p><strong>Invoices</strong></p>
-          <table>
-            <thead>
-              <tr>
-                <th>Invoice ID</th>
-                <th>Amount</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {project.invoices.map((invoice, index) => (
-                <tr key={index}>
-                  <td>{invoice.invoiceID}</td>
-                  <td>{invoice.amount}</td>
-                  <td>{invoice.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p><strong>Projected Expenses: ${project.invoices.reduce((sum, invoice) => sum + invoice.amount, 0)}</strong></p>
-        </div>
-      )}
     </div>
   );
 }

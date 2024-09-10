@@ -33,7 +33,7 @@ function App() {
     }
 
     try {
-      const response = await fetch('https://lamp-landing.anvil.app/_/api/get_projects_for_lead', {
+      const response = await fetch('https://lamp-landing.anvil.app/_/api/get_projects_for_lead_aggregate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,9 +45,9 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log('Fetched projects:', data);
-      setProjects(data);
+      const projectData = await response.json();
+
+      setProjects(projectData);  // Set the project data to state
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
