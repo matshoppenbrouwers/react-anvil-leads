@@ -41,11 +41,14 @@ function App() {
     }
   };
 
+  // Handle the event when a project lead is selected
   const handleLeadChange = (event) => {
     const lead = event.target.value;
+    console.log(`Selected lead: ${lead}`);  // Log the selected lead
     setSelectedLead(lead);
     if (lead) {
-      fetchProjectsForLead(lead);  // Fetch associated projects whenever lead changes
+      console.log('Fetching projects for selected lead...');  // Log fetch initiation
+      fetchProjectsForLead(lead);  // Fetch associated projects
     } else {
       setProjects([]);  // Clear the projects list if no lead is selected
     }
