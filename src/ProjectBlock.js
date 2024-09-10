@@ -3,46 +3,34 @@ import React, { useEffect } from 'react';
 // Updated ProgressBar component
 const ProgressBar = ({ usedDays, budgetedDays }) => {
   const isOverBudget = usedDays > budgetedDays;
-  const progressPercentage = isOverBudget ? 100 : (usedDays / budgetedDays) * 100;
-  const overBudgetPercentage = isOverBudget ? ((usedDays - budgetedDays) / budgetedDays) * 100 : 0;
+  const progressPercentage = (usedDays / budgetedDays) * 100;
 
   const barStyle = {
     backgroundColor: '#e0e0e0',
     width: '100%',
-    height: '10px', // Thinner bar
+    height: '10px',
     borderRadius: '5px',
     position: 'relative',
     overflow: 'hidden',
   };
 
   const progressStyle = {
-    width: `${progressPercentage}%`,
-    backgroundColor: '#333', // Dark grey
+    width: `${progressPercentage > 100 ? 100 : progressPercentage}%`,
+    backgroundColor: isOverBudget ? '#b22222' : '#333', // Red if over-budget, dark grey otherwise
     height: '100%',
     position: 'absolute',
     top: '0',
     left: '0',
   };
 
-  const overBudgetStyle = {
-    width: `${overBudgetPercentage}%`,
-    backgroundColor: '#b22222', // Dark red for over-budget
-    height: '100%',
-    position: 'absolute',
-    top: '0',
-    right: '0',
-  };
-
   return (
     <div style={barStyle}>
       <div style={progressStyle}></div>
-      {isOverBudget && <div style={overBudgetStyle}></div>}
     </div>
   );
 };
 
 function ProjectBlock({ project }) {
-  // Use an empty array as the fallback if 'team' is undefined or null
   const team = project.team || [];
 
   useEffect(() => {
@@ -50,7 +38,18 @@ function ProjectBlock({ project }) {
   }, [project]);
 
   return (
-    <div className="project-block" style={{ border: '1px solid #ddd', padding: '20px', marginBottom: '20px' }}>
+    <div
+      className="project-block"
+      style={{
+        maxWidth: '600px',
+        margin: '20px auto',
+        padding: '20px',
+        border: '1px solid #ddd',
+        backgroundColor: '#fff', // White background for the project container
+        borderRadius: '10px', // Rounded borders
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Optional: slight shadow to add depth
+      }}
+    >
       {/* Display projectID in Project Overview */}
       <h2>{`Project Overview: ${project.projectID}`}</h2>
 
@@ -73,8 +72,7 @@ function ProjectBlock({ project }) {
             </tr>
           </thead>
           <tbody>
-            {/* Ensure team is mapped only when it's a valid array */}
-            {Array.isArray(team) && team.map((member, index) => (
+            {team.map((member, index) => (
               <tr key={index}>
                 <td>{member.name}</td>
                 <td>{member.budgetedDays}</td>

@@ -46,8 +46,7 @@ function App() {
       }
 
       const projectData = await response.json();
-
-      setProjects(projectData);  // Set the project data to state
+      setProjects(projectData);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -58,11 +57,17 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Select a Project Lead</h1>
+    <div className="app-container" style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', paddingTop: '50px' }}>
+      {/* Title at the top */}
+      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Laterite Master Planning Dashboard</h1>
 
-      <div>
-        <select value={selectedLead} onChange={handleLeadChange}>
+      {/* Centered Dropdown and Button */}
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <select 
+          value={selectedLead} 
+          onChange={handleLeadChange} 
+          style={{ width: '600px', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}
+        >
           <option value="">-- Select a Lead --</option>
           {leads.map((lead, index) => (
             <option key={index} value={lead}>
@@ -70,13 +75,18 @@ function App() {
             </option>
           ))}
         </select>
+        <br />
+        <button 
+          onClick={fetchProjectsForLead} 
+          style={{ padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}
+        >
+          Generate
+        </button>
+
+        {selectedLead && <h2 style={{ marginTop: '20px' }}>Selected Lead: {selectedLead}</h2>}
       </div>
 
-      <button onClick={fetchProjectsForLead}>Generate</button>
-
-      {selectedLead && <h2>Selected Lead: {selectedLead}</h2>}
-
-      {/* Dynamically generate project blocks */}
+      {/* Project Blocks */}
       {projects.length > 0 && projects.map((project, index) => (
         <ProjectBlock key={index} project={project} />
       ))}
