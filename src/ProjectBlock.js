@@ -42,6 +42,7 @@ const ProgressBar = ({ usedDays, budgetedDays }) => {
 };
 
 function ProjectBlock({ project }) {
+  // Use an empty array as the fallback if 'team' is undefined or null
   const team = project.team || [];
 
   useEffect(() => {
@@ -72,7 +73,8 @@ function ProjectBlock({ project }) {
             </tr>
           </thead>
           <tbody>
-            {team.map((member, index) => (
+            {/* Ensure team is mapped only when it's a valid array */}
+            {Array.isArray(team) && team.map((member, index) => (
               <tr key={index}>
                 <td>{member.name}</td>
                 <td>{member.budgetedDays}</td>
