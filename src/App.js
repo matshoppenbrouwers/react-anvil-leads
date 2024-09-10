@@ -58,7 +58,10 @@ function App() {
     <div className="App">
       <h1>Select a Project Lead</h1>
       <div>
-        <select value={selectedLead} onChange={handleLeadChange}>
+        <select value={selectedLead} onChange={(event) => { 
+            console.log("Dropdown change detected");
+            handleLeadChange(event); 
+          }}>
           <option value="">-- Select a Lead --</option>
           {leads.map((lead, index) => (
             <option key={index} value={lead}>
