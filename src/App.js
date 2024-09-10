@@ -45,7 +45,9 @@ function App() {
     const lead = event.target.value;
     setSelectedLead(lead);
     if (lead) {
-      fetchProjectsForLead(lead);  // Fetch associated projects
+      fetchProjectsForLead(lead);  // Fetch associated projects whenever lead changes
+    } else {
+      setProjects([]);  // Clear the projects list if no lead is selected
     }
   };
 
