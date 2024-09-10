@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProjectBlock from './ProjectBlock';
 
 function App() {
   const [leads, setLeads] = useState([]);
@@ -75,17 +76,10 @@ function App() {
 
       {selectedLead && <h2>Selected Lead: {selectedLead}</h2>}
 
-      {/* Display associated projects */}
-      {projects.length > 0 && (
-        <div>
-          <h3>Associated Projects:</h3>
-          <ul>
-            {projects.map((project, index) => (
-              <li key={index}>{project}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* Dynamically generate project blocks */}
+      {projects.length > 0 && projects.map((project, index) => (
+        <ProjectBlock key={index} project={project} />
+      ))}
     </div>
   );
 }
