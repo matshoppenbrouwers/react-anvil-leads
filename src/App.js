@@ -38,7 +38,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ lead: selectedLead })  // Pass the selected lead to the server
+        body: JSON.stringify({ lead: selectedLead })
       });
 
       if (!response.ok) {
@@ -46,8 +46,8 @@ function App() {
       }
 
       const data = await response.json();
-      console.log('Fetched projects:', data);  // Log the fetched projects
-      setProjects(data);  // Set the fetched projects
+      console.log('Fetched projects:', data);
+      setProjects(data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
